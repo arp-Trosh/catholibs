@@ -1,0 +1,124 @@
+/* Catholibs — liturgical purple & gold theme */
+
+Screen {
+    background: #1a0f24;
+    color: #f2e9da;
+}
+
+#title-box {
+    width: 64;
+    border: round #c9a227;
+    padding: 2 4;
+    background: #241333;
+}
+
+#title-heading {
+    text-align: center;
+    text-style: bold;
+    width: 100%;
+    margin-bottom: 1;
+}
+
+#title-subheading,
+#mp-subheading {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 1;
+    color: #cbb8e0;
+}
+
+#title-box Button {
+    width: 100%;
+    margin-top: 1;
+}
+
+#title-box Input {
+    margin-top: 1;
+}
+
+#error-msg {
+    text-align: center;
+    width: 100%;
+}
+
+/* -- single player game screen -- */
+
+#game-panel {
+    height: 1fr;
+    border: round #c9a227;
+    padding: 1 2;
+    background: #241333;
+}
+
+#game-scroll {
+    height: 1fr;
+}
+
+#prayer-preview,
+#prayer-final {
+    margin: 1 0;
+}
+
+ListView#prayer-list {
+    height: auto;
+    max-height: 20;
+}
+
+/* -- multiplayer game screen -- */
+
+#mp-root {
+    height: 1fr;
+}
+
+MultiplayerGameScreen #game-panel {
+    height: 55%;
+}
+
+#lower-area {
+    height: 1fr;
+}
+
+#chat-panel {
+    width: 3fr;
+    border: round #6b4f8c;
+    padding: 0 1;
+    background: #1f1329;
+}
+
+#chat-log {
+    height: 1fr;
+}
+
+#side-panel {
+    width: 1fr;
+    min-width: 24;
+    border: round #6b4f8c;
+    padding: 0 1;
+    background: #1f1329;
+}
+
+#players-title {
+    margin-top: 1;
+}
+
+#player-list {
+    height: 1fr;
+}
+
+#host-controls Button {
+    width: 100%;
+    margin-top: 1;
+}
+
+#answer-row {
+    height: auto;
+    margin-top: 1;
+}
+
+#answer-row Input {
+    width: 3fr;
+}
+
+#answer-row Button {
+    width: 1fr;
+}
