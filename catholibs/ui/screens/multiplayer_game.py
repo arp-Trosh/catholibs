@@ -4,10 +4,13 @@ from textual.app import ComposeResult
 from textual.binding import Binding
 from textual.containers import Container, Horizontal, Vertical
 from textual.screen import Screen
-from textual.widgets import Button, Footer, Header, Input, ListItem, ListView, RichLog, Static
+from textual.widgets import Button, Footer, Header, Input, ListItem, ListView, RichLog, Select, Static
 
 from ...network.client import GameClient
 from ...network.server import GameServer
+from ...prayers_data import PRAYERS
+
+RANDOM_PRAYER = "__random__"
 
 
 class MultiplayerGameScreen(Screen):
@@ -39,8 +42,14 @@ class MultiplayerGameScreen(Screen):
         self.current_prompt: str | None = None
         self.current_blank_index: int | None = None
         self.progress_text = ""
+        self.selected_prayer_id: str | None = None  # None means "Random"
 
         self._msg_queue: asyncio.Queue = asyncio.Queue()
+        # Renders are triggered from two independent tasks (the initial
+        # connect handshake and the message loop), which can otherwise
+        # interleave mid-render and mount duplicate-ID widgets.
+        self._game_content_lock = asyncio.Lock()
+        self._side_panel_lock = asyncio.Lock()
 
     # -- layout ---------------------------------------------------------------
 
@@ -170,6 +179,10 @@ class MultiplayerGameScreen(Screen):
         await self._render_side_panel()
 
     async def _render_game_content(self) -> None:
+        async with self._game_content_lock:
+            await self._do_render_game_content()
+
+    async def _do_render_game_content(self) -> None:
         container = self.query_one("#game-panel", Container)
         # Drop any dynamically-mounted answer input from a previous turn.
         for child in list(container.query("#answer-row")):
@@ -208,6 +221,10 @@ class MultiplayerGameScreen(Screen):
             self._set_game_content(f"[bold gold3]{self.prayer_title} — Revealed![/bold gold3]\n\n{text}")
 
     async def _render_side_panel(self) -> None:
+        async with self._side_panel_lock:
+            await self._do_render_side_panel()
+
+    async def _do_render_side_panel(self) -> None:
         player_list = self.query_one("#player-list", ListView)
         await player_list.clear()
         my_id = self.client.player_id if self.client else None
@@ -222,11 +239,22 @@ class MultiplayerGameScreen(Screen):
         controls = self.query_one("#host-controls", Vertical)
         await controls.remove_children()
         if self.client and self.client.is_host:
+            await controls.mount(Static("[bold]Next prayer[/bold]"))
+            await controls.mount(self._build_prayer_select())
             if self.phase == "lobby":
                 await controls.mount(Button("Begin Game  [b]", id="begin-btn", variant="primary"))
             else:
                 await controls.mount(Button("End Game  [e]", id="end-btn"))
                 await controls.mount(Button("Restart  [r]", id="restart-btn", variant="primary"))
+
+    def _build_prayer_select(self) -> Select:
+        options = [("Random", RANDOM_PRAYER)] + [(p.title, p.id) for p in PRAYERS]
+        return Select(
+            options,
+            value=self.selected_prayer_id or RANDOM_PRAYER,
+            id="prayer-select",
+            allow_blank=False,
+        )
 
     # -- user input -------------------------------------------------------------
 
@@ -238,6 +266,10 @@ class MultiplayerGameScreen(Screen):
                 await self.client.send_chat(text)
         elif event.input.id == "answer-input":
             await self._submit_answer(event.value)
+
+    def on_select_changed(self, event: Select.Changed) -> None:
+        if event.select.id == "prayer-select":
+            self.selected_prayer_id = None if event.value == RANDOM_PRAYER else event.value
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "begin-btn":
@@ -259,7 +291,7 @@ class MultiplayerGameScreen(Screen):
 
     async def action_begin(self) -> None:
         if self.client and self.client.is_host and self.phase == "lobby":
-            await self.client.send_begin()
+            await self.client.send_begin(self.selected_prayer_id)
 
     async def action_end(self) -> None:
         if self.client and self.client.is_host:
@@ -267,7 +299,7 @@ class MultiplayerGameScreen(Screen):
 
     async def action_restart(self) -> None:
         if self.client and self.client.is_host:
-            await self.client.send_restart()
+            await self.client.send_restart(self.selected_prayer_id)
 
     def action_leave(self) -> None:
         if self.client:

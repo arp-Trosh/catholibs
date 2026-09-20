@@ -116,6 +116,11 @@ MultiplayerGameScreen #game-panel {
     margin-top: 1;
 }
 
+#host-controls Select {
+    width: 100%;
+    margin-top: 1;
+}
+
 #answer-row {
     height: auto;
     margin-top: 1;
