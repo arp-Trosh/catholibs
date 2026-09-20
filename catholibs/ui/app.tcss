@@ -8,7 +8,7 @@ Screen {
 #title-box {
     width: 64;
     border: round #c9a227;
-    padding: 2 4;
+    padding: 1 4;
     background: #241333;
 }
 
@@ -30,6 +30,12 @@ Screen {
 #title-box Button {
     width: 100%;
     margin-top: 1;
+}
+
+#title-art {
+    width: auto;
+    margin-top: 1;
+    color: #c9a227;
 }
 
 #title-box Input {

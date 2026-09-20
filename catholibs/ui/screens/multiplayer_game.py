@@ -51,7 +51,7 @@ class MultiplayerGameScreen(Screen):
                 yield Static("Connecting...", id="game-content")
             with Horizontal(id="lower-area"):
                 with Vertical(id="chat-panel"):
-                    yield RichLog(id="chat-log", wrap=True, markup=True, highlight=False)
+                    yield RichLog(id="chat-log", wrap=True, min_width=0, markup=True, highlight=False)
                     yield Input(placeholder="Type a message and press Enter...", id="chat-input")
                 with Vertical(id="side-panel"):
                     yield Static("[bold]Players[/bold]", id="players-title")

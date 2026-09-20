@@ -20,7 +20,8 @@ class JoinSetupScreen(Screen):
                 with Vertical(id="title-box"):
                     yield Static("[bold gold3]Join a Game[/bold gold3]")
                     yield Input(placeholder="Your name", id="name-input", value="Player")
-                    yield Input(placeholder=f"Server address (e.g. 192.168.1.5:{DEFAULT_PORT})", id="address-input")
+                    yield Input(placeholder="Server IP address (e.g. 192.168.1.5)", id="ip-input")
+                    yield Input(placeholder=f"Port (default {DEFAULT_PORT})", id="port-input")
                     yield Static("", id="error-msg")
                     yield Button("Join  [Enter]", id="join-btn", variant="primary")
                     yield Button("Back  [esc]", id="back-btn")
@@ -37,24 +38,22 @@ class JoinSetupScreen(Screen):
 
     def _join(self) -> None:
         name = self.query_one("#name-input", Input).value.strip() or "Player"
-        address_text = self.query_one("#address-input", Input).value.strip()
-        if not address_text:
-            self.query_one("#error-msg", Static).update("[red]Please enter a server address.[/red]")
-            return
-
-        if ":" in address_text:
-            host, _, port_text = address_text.rpartition(":")
-            try:
-                port = int(port_text)
-            except ValueError:
-                self.query_one("#error-msg", Static).update("[red]Invalid port in address.[/red]")
-                return
-        else:
-            host, port = address_text, DEFAULT_PORT
+        host = self.query_one("#ip-input", Input).value.strip()
+        port_text = self.query_one("#port-input", Input).value.strip()
 
         if not host:
-            self.query_one("#error-msg", Static).update("[red]Please enter a valid host.[/red]")
+            self.query_one("#error-msg", Static).update("[red]Please enter a server IP address.[/red]")
             return
+
+        port = DEFAULT_PORT
+        if port_text:
+            try:
+                port = int(port_text)
+                if not (1 <= port <= 65535):
+                    raise ValueError
+            except ValueError:
+                self.query_one("#error-msg", Static).update("[red]Please enter a valid port number (1-65535).[/red]")
+                return
 
         from .multiplayer_game import MultiplayerGameScreen
 
