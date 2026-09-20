@@ -1,100 +1,97 @@
-"""Background music: loops the bundled tracks through an external ``mpv``
-process, controlled at runtime over mpv's JSON IPC socket.
+"""Background music: loops the bundled tracks through pygame's mixer.
 
-mpv (rather than a Python audio library) keeps this dependency-free -- the
-game only shells out to a binary that either exists on the host or doesn't.
-When it's missing, ``MusicPlayer.available`` is False and every call becomes
-a no-op, so the game still runs without sound.
+pygame's wheels bundle their own copy of SDL2_mixer, so playback needs
+nothing installed on the host beyond the project's normal ``pip install`` --
+no external player binary, on any platform. When pygame (or its mixer)
+isn't usable -- missing dependency, no audio device, etc. -- ``available``
+is False and every call becomes a no-op, so the game still runs without
+sound.
 """
 from __future__ import annotations
 
 import atexit
-import json
 import random
-import shutil
-import socket
-import subprocess
-import tempfile
-import time
-import uuid
+import threading
 from pathlib import Path
 
 MUSIC_DIR = Path(__file__).with_name("assets") / "music"
 DEFAULT_VOLUME = 50
+_POLL_SECONDS = 0.2
+
+try:
+    import pygame
+except ImportError:
+    pygame = None
 
 
 class MusicPlayer:
-    """Owns the mpv subprocess that loops the background music playlist."""
+    """Owns a background thread that loops the bundled music playlist."""
 
     def __init__(self) -> None:
         self.volume: int = DEFAULT_VOLUME
         self.muted: bool = False
-        self.available: bool = shutil.which("mpv") is not None
-        self._process: subprocess.Popen | None = None
-        self._socket_path = Path(tempfile.gettempdir()) / f"catholibs-mpv-{uuid.uuid4().hex}.sock"
+        self.available: bool = False
+        self._tracks: list[str] = []
+        self._thread: threading.Thread | None = None
+        self._stop_event = threading.Event()
 
     def start(self) -> None:
-        """Launch mpv looping all bundled tracks in shuffled order."""
-        if not self.available:
+        """Initialize the mixer and launch the playback thread."""
+        if pygame is None:
             return
-        tracks = sorted(str(p) for p in MUSIC_DIR.glob("*.mp4"))
-        if not tracks:
-            self.available = False
+        self._tracks = sorted(str(p) for p in MUSIC_DIR.glob("*.ogg"))
+        if not self._tracks:
             return
-        random.shuffle(tracks)
         try:
-            self._process = subprocess.Popen(
-                [
-                    "mpv",
-                    "--no-video",
-                    "--no-terminal",
-                    "--loop-playlist=inf",
-                    f"--volume={self.volume}",
-                    f"--input-ipc-server={self._socket_path}",
-                    *tracks,
-                ],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
-            )
-        except OSError:
-            self.available = False
+            pygame.mixer.init()
+        except (pygame.error, NotImplementedError):
             return
+        self.available = True
+        self._apply_volume()
+        self._thread = threading.Thread(target=self._run, daemon=True)
+        self._thread.start()
         atexit.register(self._shutdown)
+
+    def _run(self) -> None:
+        playlist = list(self._tracks)
+        random.shuffle(playlist)
+        index = 0
+        while not self._stop_event.is_set():
+            if index >= len(playlist):
+                random.shuffle(playlist)
+                index = 0
+            try:
+                pygame.mixer.music.load(playlist[index])
+                pygame.mixer.music.play()
+            except pygame.error:
+                return
+            index += 1
+            while pygame.mixer.music.get_busy() and not self._stop_event.is_set():
+                self._stop_event.wait(_POLL_SECONDS)
 
     def set_volume(self, volume: int) -> None:
         self.volume = max(0, min(100, volume))
-        self._send(["set_property", "volume", self.volume])
+        self._apply_volume()
 
     def change_volume(self, delta: int) -> None:
         self.set_volume(self.volume + delta)
 
     def toggle_mute(self) -> None:
         self.muted = not self.muted
-        self._send(["set_property", "mute", self.muted])
+        self._apply_volume()
 
-    def _send(self, command: list) -> None:
+    def _apply_volume(self) -> None:
         if not self.available:
             return
-        payload = json.dumps({"command": command}).encode() + b"\n"
-        # mpv needs a beat after launch to create the socket file; a couple
-        # of quick retries covers a command sent right after startup.
-        for attempt in range(3):
-            try:
-                with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as sock:
-                    sock.settimeout(0.3)
-                    sock.connect(str(self._socket_path))
-                    sock.sendall(payload)
-                return
-            except OSError:
-                if attempt == 2:
-                    return
-                time.sleep(0.05)
+        level = 0 if self.muted else self.volume
+        pygame.mixer.music.set_volume(level / 100)
 
     def _shutdown(self) -> None:
-        if self._process and self._process.poll() is None:
-            self._process.terminate()
-            try:
-                self._process.wait(timeout=2)
-            except subprocess.TimeoutExpired:
-                self._process.kill()
-        self._socket_path.unlink(missing_ok=True)
+        if not self.available:
+            return
+        self.available = False
+        self._stop_event.set()
+        pygame.mixer.music.stop()
+        if self._thread is not None:
+            self._thread.join(timeout=1)
+        pygame.mixer.quit()
