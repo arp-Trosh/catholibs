@@ -4,7 +4,7 @@ from textual.containers import Center, Middle, Vertical
 from textual.screen import Screen
 from textual.widgets import Button, Footer, Input, Static
 
-DEFAULT_PORT = 8765
+DEFAULT_PORT = 5555
 
 
 class JoinSetupScreen(Screen):
