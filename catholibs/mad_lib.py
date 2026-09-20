@@ -15,14 +15,15 @@ from collections import Counter
 from dataclasses import dataclass, field
 from enum import Enum
 
-from .prayer_tags import WORD_TAGS
+from .prayer_tags import ABSTRACT_NOUNS, WORD_TAGS
 from .prayers_data import Prayer
 
 _TOKEN_RE = re.compile(r"[A-Za-z']+|[^A-Za-z']+")
 
 
 class Category(Enum):
-    NOUN = ("noun", "Give me a noun")
+    NOUN_CONCRETE = ("noun", "Give me a noun (something you can see or touch)")
+    NOUN_ABSTRACT = ("noun", "Give me a noun (an idea, feeling, or quality)")
     PLURAL_NOUN = ("plural noun", "Give me a plural noun")
     VERB = ("verb", "Give me a verb")
     VERB_PAST = ("verb (past tense)", "Give me a verb (past tense)")
@@ -48,27 +49,67 @@ class Category(Enum):
 # original word -- they only vary in comedic "flavor" (a body part is still
 # a noun; a celebrity is still a noun), so any of them keeps the sentence
 # grammatical as long as the *bucket* (noun/verb/adjective/...) is right.
+#
+# The "N" bucket is split into concrete/abstract pools instead of one flat
+# list: a blanked word like "kingdom" (abstract) must never be replaced by a
+# prompt for something like an animal or body part (concrete), and vice
+# versa -- see noun_is_abstract(). Each pool is weighted so the flavor
+# categories (animal, color, celebrity, ...) show up as occasional variety
+# rather than the norm; plain "give me a noun" dominates.
+_CONCRETE_NOUN_CATEGORIES: list[Category] = [
+    Category.NOUN_CONCRETE,
+    Category.NOUN_CONCRETE,
+    Category.NOUN_CONCRETE,
+    Category.NOUN_CONCRETE,
+    Category.NOUN_CONCRETE,
+    Category.CELEBRITY,
+    Category.CELEBRITY,
+    Category.BODY_PART,
+    Category.BODY_PART,
+    Category.PLACE,
+    Category.PLACE,
+    Category.ANIMAL,
+]
+_ABSTRACT_NOUN_CATEGORIES: list[Category] = [
+    Category.NOUN_ABSTRACT,
+    Category.NOUN_ABSTRACT,
+    Category.NOUN_ABSTRACT,
+    Category.NOUN_ABSTRACT,
+    Category.NOUN_ABSTRACT,
+    Category.SIN,
+    Category.SIN,
+    Category.EMOTION,
+    Category.EMOTION,
+]
 _BUCKET_CATEGORIES: dict[str, list[Category]] = {
-    "N": [
-        Category.NOUN,
-        Category.NOUN,
-        Category.CELEBRITY,
-        Category.BODY_PART,
-        Category.SIN,
-        Category.ANIMAL,
-        Category.COLOR,
-        Category.PLACE,
-        Category.EMOTION,
-    ],
     "NP": [Category.PLURAL_NOUN],
     "V": [Category.VERB],
     "VD": [Category.VERB_PAST],
     "VG": [Category.VERB_ING],
-    "ADJ": [Category.ADJECTIVE, Category.COLOR],
+    "ADJ": [Category.ADJECTIVE, Category.ADJECTIVE, Category.ADJECTIVE, Category.COLOR],
     "ADV": [Category.ADVERB],
     "NUM": [Category.NUMBER],
     "EXCL": [Category.EXCLAMATION],
 }
+
+
+def noun_is_abstract(word: str) -> bool:
+    """Whether a singular-noun word should be blanked with an abstract-noun
+    prompt (idea/feeling/quality) rather than a concrete one (something you
+    can see or touch). See prayer_tags.ABSTRACT_NOUNS for the word list and
+    the reasoning behind concrete-by-default."""
+    return word.lower().strip("'") in ABSTRACT_NOUNS
+
+
+def _match_case(answer: str, original_word: str) -> str:
+    """Match the capitalization of the blanked word: if "Kingdom" was blanked,
+    the player's answer displays capitalized too; if "kingdom" was blanked,
+    it displays lowercase -- regardless of how the player typed it."""
+    if not answer or not original_word:
+        return answer
+    if original_word[0].isupper():
+        return answer[0].upper() + answer[1:]
+    return answer[0].lower() + answer[1:]
 
 
 @dataclass
@@ -110,7 +151,7 @@ class MadLib:
             if blank is None:
                 out.append(tok)
             elif blank.answer is not None:
-                out.append(blank.answer)
+                out.append(_match_case(blank.answer, blank.original_word))
             elif reveal_unanswered:
                 out.append(f"[{blank.category.label}]")
             else:
@@ -125,7 +166,8 @@ class MadLib:
             if blank is None:
                 out.append(tok)
             elif blank.answer is not None:
-                out.append(f"[bold gold3]{blank.answer}[/bold gold3]")
+                answer = _match_case(blank.answer, blank.original_word)
+                out.append(f"[bold gold3]{answer}[/bold gold3]")
             else:
                 placeholder = "_" * max(4, len(blank.original_word))
                 out.append(f"[dim]{placeholder}[/dim]")
@@ -178,7 +220,15 @@ def build_mad_lib(
     blanks: dict[int, Blank] = {}
     for i in chosen:
         bucket = candidate_buckets[i]
-        category = rng.choice(_BUCKET_CATEGORIES[bucket])
+        if bucket == "N":
+            pool = (
+                _ABSTRACT_NOUN_CATEGORIES
+                if noun_is_abstract(tokens[i])
+                else _CONCRETE_NOUN_CATEGORIES
+            )
+        else:
+            pool = _BUCKET_CATEGORIES[bucket]
+        category = rng.choice(pool)
         blanks[i] = Blank(index=i, category=category, original_word=tokens[i])
 
     return MadLib(prayer=prayer, tokens=tokens, blanks=blanks)

@@ -1324,56 +1324,6 @@ PRAYERS: list[Prayer] = [
         ),
     ),
     Prayer(
-        id="cbop_1_reception_of_the_penitent",
-        title="1. Reception of the Penitent",
-        text=(
-            "Penitent: In the name of the Father, and of the Son, and of the Holy Spirit. Amen. "
-            "Priest: May the grace of the Holy Spirit fill your heart with light, that you may "
-            "confess your sins with loving trust and come to know that God is merciful. Penitent: "
-            "Amen."
-        ),
-    ),
-    Prayer(
-        id="cbop_2_reading_of_the_word_of_god",
-        title="2. Reading of the Word of God",
-        text=(
-            "Priest: After John had been arrested, Jesus came to Galilee proclaiming the Gospel of "
-            "God: \"This is the time of fulfillment. The kingdom of God is at hand! Repent and believe "
-            "in the Gospel.\" (Mark 1:14-15). (Another reading may be used.)"
-        ),
-    ),
-    Prayer(
-        id="cbop_3_confession_of_sins",
-        title="3. Confession of Sins",
-        text=(
-            "The penitent confesses his sins; the priest accepts the confession and imposes a "
-            "penance. The penitent then expresses sorrow for sins in these or similar words: "
-            "Penitent: My God, I am sorry for my sins with all my heart. In choosing to do wrong and "
-            "failing to do good, I have sinned against you whom I should love above all things. I "
-            "firmly intend, with your help, to do penance, to sin no more, and to avoid whatever "
-            "leads me to sin. Our Savior Jesus Christ suffered and died for us. In his name, my God, "
-            "have mercy."
-        ),
-    ),
-    Prayer(
-        id="cbop_4_absolution",
-        title="4. Absolution",
-        text=(
-            "Priest: God, the Father of mercies, through the death and resurrection of his Son, has "
-            "reconciled the world to himself and sent the Holy Spirit among us for the forgiveness of "
-            "sins; through the ministry of the Church may God give you pardon and peace, and I "
-            "absolve you from your sins in the name of the Father, and of the Son, and of the Holy "
-            "Spirit. Amen."
-        ),
-    ),
-    Prayer(
-        id="cbop_5_proclamation_of_praise_of_god_and_dismissal",
-        title="5. Proclamation of Praise of God and Dismissal",
-        text=(
-            "Priest: Give thanks to the Lord, for he is good. Penitent: His mercy endures for ever."
-        ),
-    ),
-    Prayer(
         id="cbop_thanksgiving_after_confession",
         title="Thanksgiving After Confession",
         text=(
@@ -1707,132 +1657,6 @@ PRAYERS: list[Prayer] = [
         ),
     ),
     Prayer(
-        id="cbop_1_jesus_is_condemned_to_death",
-        title="1. Jesus Is Condemned to Death",
-        text=(
-            "O Jesus, You desired to die for me that I may receive supernatural life, sanctifying "
-            "grace, and become a child of God. How precious must be that life. Teach me to appreciate "
-            "it more and help me never to lose it by sin."
-        ),
-    ),
-    Prayer(
-        id="cbop_2_jesus_bears_his_cross",
-        title="2. Jesus Bears His Cross",
-        text=(
-            "O Jesus, You have chosen to die the disgraceful death on the Cross. You have paid a "
-            "high price for my redemption and the life of grace that was bestowed upon me. May I love "
-            "You always and bear my crosses for Your sake."
-        ),
-    ),
-    Prayer(
-        id="cbop_3_jesus_falls_the_first_time",
-        title="3. Jesus Falls the First Time",
-        text=(
-            "O Jesus, Your painful fall under the Cross and Your quick rise teach me to repent and "
-            "rise instantly should I ever be forgetful of Your love and commit a mortal sin. Make me "
-            "strong enough to conquer my wicked passions."
-        ),
-    ),
-    Prayer(
-        id="cbop_4_jesus_meets_his_mother",
-        title="4. Jesus Meets His Mother",
-        text=(
-            "O Jesus, Your afflicted Mother was resigned to Your Passion because she is my Mother "
-            "also, and wants to see me live and die as a child of God. Grant me a tender love for You "
-            "and Your holy Mother."
-        ),
-    ),
-    Prayer(
-        id="cbop_5_jesus_is_helped_by_simon",
-        title="5. Jesus Is Helped by Simon",
-        text=(
-            "O Jesus, Simon first reluctantly helped You to carry the Cross. Make me better "
-            "understand the value of my sufferings which should lead me closer to You, as Simon was "
-            "united with You through the Cross."
-        ),
-    ),
-    Prayer(
-        id="cbop_6_jesus_and_veronica",
-        title="6. Jesus and Veronica",
-        text=(
-            "O Jesus, how graciously did You reward that courageous woman. When I side with You "
-            "against sin and temptation, You surely will increase the beauty of my soul and fill me "
-            "with joy and peace. Jesus, give me courage."
-        ),
-    ),
-    Prayer(
-        id="cbop_7_jesus_falls_a_second_time",
-        title="7. Jesus Falls a Second Time",
-        text=(
-            "O Jesus, despite my good resolutions I have sinned repeatedly. But Your sufferings "
-            "assure me of forgiveness if only I return to You with a contrite heart. I repent for "
-            "having offended You. Help me to avoid sin in the future."
-        ),
-    ),
-    Prayer(
-        id="cbop_8_jesus_speaks_to_the_women",
-        title="8. Jesus Speaks to the Women",
-        text=(
-            "O Jesus, You told the women of Jerusalem to weep for their sins rather than for You. "
-            "Make me weep for my sins which caused Your terrible sufferings and the loss of my "
-            "friendship with You."
-        ),
-    ),
-    Prayer(
-        id="cbop_9_jesus_falls_a_third_time",
-        title="9. Jesus Falls a Third Time",
-        text=(
-            "O Jesus, I see You bowed to the earth, enduring the pains of extreme exhaustion. Grant "
-            "that I may never yield to despair in time of hardship and spiritual distress. Let me "
-            "come to You for help and comfort."
-        ),
-    ),
-    Prayer(
-        id="cbop_10_jesus_is_stripped_of_his_garments",
-        title="10. Jesus Is Stripped of His Garments",
-        text=(
-            "O Jesus, You permitted Yourself to be stripped of Your garments. Strip me of sin and "
-            "clothe me with Your holiness. Grant that I may sacrifice all my unlawful attachments "
-            "rather than imperil the divine life of my soul."
-        ),
-    ),
-    Prayer(
-        id="cbop_11_jesus_is_nailed_to_the_cross",
-        title="11. Jesus Is Nailed to the Cross",
-        text=(
-            "O Jesus, how could I complain if nailed to God's commandments which are given for my "
-            "salvation, when I see You nailed to the Cross! Strengthen my faith and increase my love "
-            "for You. Help me keep the commandments."
-        ),
-    ),
-    Prayer(
-        id="cbop_12_jesus_dies_on_the_cross",
-        title="12. Jesus Dies on the Cross",
-        text=(
-            "O Jesus, dying on the Cross, You preached love and forgiveness. May I be thankful that "
-            "You have made me a child of God. Help me to forgive all who have injured me, so that I "
-            "myself may obtain forgiveness."
-        ),
-    ),
-    Prayer(
-        id="cbop_13_jesus_is_taken_from_the_cross",
-        title="13. Jesus Is Taken from the Cross",
-        text=(
-            "O Jesus, a sword of grief pierced Your Mother's heart when You were lying lifeless in "
-            "her arms. Grant me through her intercession to lead the life of a loyal child of Mary, "
-            "so that I may be received by her at my death."
-        ),
-    ),
-    Prayer(
-        id="cbop_14_jesus_is_placed_in_the_sepulcher",
-        title="14. Jesus Is Placed in the Sepulcher",
-        text=(
-            "O Jesus, Your enemies triumphed when they sealed Your tomb. But Your eternal triumph "
-            "began on Easter morning. Strengthen my good will to live for You until the divine life "
-            "of my soul will be manifested in heaven."
-        ),
-    ),
-    Prayer(
         id="cbop_prayer_to_receive_the_holy_spirit",
         title="Prayer to Receive the Holy Spirit",
         text=(
@@ -2040,94 +1864,12 @@ PRAYERS: list[Prayer] = [
         ),
     ),
     Prayer(
-        id="cbop_1_the_annunciation",
-        title="1. The Annunciation",
-        text=(
-            "Mary, you received with deep humility the news of the Angel Gabriel that you were to be "
-            "the Mother of God's Son; obtain for me a similar humility."
-        ),
-    ),
-    Prayer(
-        id="cbop_2_the_visitation",
-        title="2. The Visitation",
-        text=(
-            "Mary, you showed true charity in visiting Elizabeth and remaining with her for three "
-            "months before the birth of John the Baptist; obtain for me the grace to love my "
-            "neighbor."
-        ),
-    ),
-    Prayer(
-        id="cbop_3_the_birth_of_jesus",
-        title="3. The Birth of Jesus",
-        text=(
-            "Jesus, You accepted poverty when You were placed in the manger although You were our "
-            "God; grant that I may have the spirit of poverty."
-        ),
-    ),
-    Prayer(
-        id="cbop_4_the_presentation_in_the_temple",
-        title="4. The Presentation in the Temple",
-        text=(
-            "Mary, you obeyed the law of God in presenting the Child Jesus in the Temple; obtain for "
-            "me the virtue of obedience."
-        ),
-    ),
-    Prayer(
-        id="cbop_5_the_finding_in_the_temple",
-        title="5. The Finding in the Temple",
-        text=(
-            "Mary, you were sad at the loss of Jesus and joyous on finding Him surrounded by "
-            "teachers in the Temple; obtain for me the virtue of piety."
-        ),
-    ),
-    Prayer(
         id="cbop_the_five_luminous_mysteries",
         title="The Five Luminous Mysteries",
         text=(
             "(Said on Thursdays [except during Lent]) The Luminous Mysteries recall to our mind "
             "important events of the Public Ministry of Christ through which He announces the coming "
             "of the Kingdom of God."
-        ),
-    ),
-    Prayer(
-        id="cbop_1_christ_s_baptism_in_the_jordan",
-        title="1. Christ's Baptism in the Jordan",
-        text=(
-            "Jesus, at Your Baptism the Father called You His beloved Son and the Holy Spirit came "
-            "upon You to invest You with Your mission; help me to keep my Baptismal Promises."
-        ),
-    ),
-    Prayer(
-        id="cbop_2_christ_s_self_manifestation_at_cana",
-        title="2. Christ's Self-Manifestation at Cana",
-        text=(
-            "Mary, the first among believers in Christ, upon your intercession your Son changed "
-            "water into wine and brought the disciples to faith; help me to do whatever Jesus says."
-        ),
-    ),
-    Prayer(
-        id="cbop_3_christ_s_proclamation_of_the_kingdom",
-        title="3. Christ's Proclamation of the Kingdom",
-        text=(
-            "Jesus, You preached the Kingdom of God with its call to forgiveness, inaugurating the "
-            "ministry of mercy; help me to seek forgiveness for my sins."
-        ),
-    ),
-    Prayer(
-        id="cbop_4_the_transfiguration_of_our_lord",
-        title="4. The Transfiguration of Our Lord",
-        text=(
-            "Jesus, the glory of the Godhead shone forth from Your face as the Father commanded the "
-            "Apostles to be transfigured by the Spirit; help me to be a new person in You."
-        ),
-    ),
-    Prayer(
-        id="cbop_5_christ_s_institution_of_the_eucharist",
-        title="5. Christ's Institution of the Eucharist",
-        text=(
-            "Jesus, at the Last Supper, You offered Your Body and Blood as food under the signs of "
-            "bread and wine and testified to Your love for humanity; help me to attain active "
-            "participation at Mass."
         ),
     ),
     Prayer(
@@ -2141,92 +1883,12 @@ PRAYERS: list[Prayer] = [
         ),
     ),
     Prayer(
-        id="cbop_1_the_agony_in_the_garden",
-        title="1. The Agony in the Garden",
-        text=(
-            "Jesus, in the Garden of Gethsemane, You suffered a bitter agony because of our sins; "
-            "grant me true contrition."
-        ),
-    ),
-    Prayer(
-        id="cbop_2_the_scourging_at_the_pillar",
-        title="2. The Scourging at the Pillar",
-        text=(
-            "Jesus, You endured a cruel scourging and Your flesh was torn by heavy blows; help me to "
-            "have the virtue of purity."
-        ),
-    ),
-    Prayer(
-        id="cbop_3_the_crowning_with_thorns",
-        title="3. The Crowning with Thorns",
-        text=(
-            "Jesus, You patiently endured the pain from the crown of sharp thorns that was forced "
-            "upon Your head; grant me the strength to have moral courage."
-        ),
-    ),
-    Prayer(
-        id="cbop_4_the_carrying_of_the_cross",
-        title="4. The Carrying of the Cross",
-        text=(
-            "Jesus, You willingly carried your Cross for love of Your Father and all people; grant "
-            "me the virtue of patience."
-        ),
-    ),
-    Prayer(
-        id="cbop_5_the_crucifixion",
-        title="5. The Crucifixion",
-        text=(
-            "Jesus, for love of me You endured three hours of torture on the Cross and gave up Your "
-            "Spirit; grant me the grace of final perseverance."
-        ),
-    ),
-    Prayer(
         id="cbop_the_five_glorious_mysteries",
         title="The Five Glorious Mysteries",
         text=(
             "(Said on Wednesdays [except during Lent] and the Sundays from Easter until Advent) The "
             "Glorious Mysteries recall to our mind the ratification of Christ's sacrifice for the "
             "redemption of the world, and our sharing in the fruits of His sacrifice."
-        ),
-    ),
-    Prayer(
-        id="cbop_1_the_resurrection",
-        title="1. The Resurrection",
-        text=(
-            "Jesus, You rose from the dead in triumph and remained for forty days with your "
-            "disciples, instructing and encouraging them; increase my faith."
-        ),
-    ),
-    Prayer(
-        id="cbop_2_the_ascension",
-        title="2. The Ascension",
-        text=(
-            "Jesus, in the presence of Mary and the disciples You ascended to heaven to sit at the "
-            "Father's right hand; increase the virtue of hope in me."
-        ),
-    ),
-    Prayer(
-        id="cbop_3_the_descent_of_the_holy_spirit",
-        title="3. The Descent of the Holy Spirit",
-        text=(
-            "Jesus, as You promised, You sent the Holy Spirit upon Mary and the disciples under the "
-            "form of tongues of fire; increase my love for God."
-        ),
-    ),
-    Prayer(
-        id="cbop_4_the_assumption",
-        title="4. The Assumption",
-        text=(
-            "Mary, by the power of God you were assumed into heaven and united with your Divine Son; "
-            "help me to have true devotion to you."
-        ),
-    ),
-    Prayer(
-        id="cbop_5_the_crowning_of_the_blessed_virgin",
-        title="5. The Crowning of the Blessed Virgin",
-        text=(
-            "Mary, you were crowned Queen of heaven by your Divine Son to the great joy of all the "
-            "Saints; obtain eternal happiness for me."
         ),
     ),
     Prayer(
