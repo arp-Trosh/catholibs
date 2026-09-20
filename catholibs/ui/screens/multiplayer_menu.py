@@ -4,6 +4,8 @@ from textual.containers import Center, Middle, Vertical
 from textual.screen import Screen
 from textual.widgets import Button, Footer, Static
 
+from ..widgets.music_bar import MusicBar
+
 
 class MultiplayerMenuScreen(Screen):
     """Choose to Host a new game or Join an existing one."""
@@ -15,6 +17,7 @@ class MultiplayerMenuScreen(Screen):
     ]
 
     def compose(self) -> ComposeResult:
+        yield MusicBar()
         with Middle():
             with Center():
                 with Vertical(id="title-box"):

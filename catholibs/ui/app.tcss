@@ -5,6 +5,50 @@ Screen {
     color: #f2e9da;
 }
 
+/* -- always-visible music controls, top-left corner -- */
+
+MusicBar {
+    dock: top;
+    width: auto;
+    height: 3;
+    border: round #6b4f8c;
+    background: #1f1329;
+    padding: 0 1;
+}
+
+/* these two screens also dock a Header to the top edge; since Textual
+   doesn't stack same-edge docks automatically, nudge MusicBar below it
+   so the two don't paint on top of each other */
+SinglePlayerScreen MusicBar,
+MultiplayerGameScreen MusicBar {
+    offset: 0 1;
+}
+
+MusicBar Button.music-btn {
+    min-width: 3;
+    width: 5;
+    height: 1;
+    border: none;
+    padding: 0;
+    background: #1f1329;
+    color: #f2e9da;
+}
+
+MusicBar Button.music-btn:hover {
+    background: #6b4f8c;
+}
+
+MusicBar Button.music-btn:focus {
+    text-style: bold;
+}
+
+#music-meter {
+    width: auto;
+    height: 1;
+    content-align: center middle;
+    padding: 0 1;
+}
+
 #title-box {
     width: 64;
     border: round #c9a227;
@@ -101,6 +145,9 @@ MultiplayerGameScreen #game-panel {
     border: round #6b4f8c;
     padding: 0 1;
     background: #1f1329;
+    scrollbar-size-vertical: 1;
+    scrollbar-color: #c9a227;
+    scrollbar-background: #1f1329;
 }
 
 #players-title {
@@ -108,7 +155,12 @@ MultiplayerGameScreen #game-panel {
 }
 
 #player-list {
-    height: 1fr;
+    height: auto;
+    max-height: 10;
+}
+
+#host-controls {
+    height: auto;
 }
 
 #host-controls Button {

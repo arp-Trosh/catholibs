@@ -2,13 +2,14 @@ import asyncio
 
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.containers import Container, Horizontal, Vertical
+from textual.containers import Container, Horizontal, Vertical, VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Button, Footer, Header, Input, ListItem, ListView, RichLog, Select, Static
 
 from ...network.client import GameClient
 from ...network.server import GameServer
 from ...prayers_data import PRAYERS
+from ..widgets.music_bar import MusicBar
 
 RANDOM_PRAYER = "__random__"
 
@@ -54,6 +55,7 @@ class MultiplayerGameScreen(Screen):
     # -- layout ---------------------------------------------------------------
 
     def compose(self) -> ComposeResult:
+        yield MusicBar()
         yield Header()
         with Container(id="mp-root"):
             with Container(id="game-panel"):
@@ -62,7 +64,7 @@ class MultiplayerGameScreen(Screen):
                 with Vertical(id="chat-panel"):
                     yield RichLog(id="chat-log", wrap=True, min_width=0, markup=True, highlight=False)
                     yield Input(placeholder="Type a message and press Enter...", id="chat-input")
-                with Vertical(id="side-panel"):
+                with VerticalScroll(id="side-panel"):
                     yield Static("[bold]Players[/bold]", id="players-title")
                     yield ListView(id="player-list")
                     yield Vertical(id="host-controls")

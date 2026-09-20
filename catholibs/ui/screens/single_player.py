@@ -8,6 +8,7 @@ from textual.widgets import Button, Footer, Header, Input, ListItem, ListView, S
 
 from ...mad_lib import MadLib, build_mad_lib
 from ...prayers_data import PRAYERS
+from ..widgets.music_bar import MusicBar
 
 
 class SinglePlayerScreen(Screen):
@@ -27,6 +28,7 @@ class SinglePlayerScreen(Screen):
         self.phase: str = "select"
 
     def compose(self) -> ComposeResult:
+        yield MusicBar()
         yield Header()
         with Container(id="game-panel"):
             yield VerticalScroll(id="game-scroll")

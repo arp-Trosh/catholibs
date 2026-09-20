@@ -6,6 +6,8 @@ from textual.containers import Center, Middle, VerticalScroll
 from textual.screen import Screen
 from textual.widgets import Button, Footer, Static
 
+from ..widgets.music_bar import MusicBar
+
 JESUS_ART = Path(__file__).with_name("jesus.txt").read_text().rstrip("\n")
 
 
@@ -19,6 +21,7 @@ class TitleScreen(Screen):
     ]
 
     def compose(self) -> ComposeResult:
+        yield MusicBar()
         with Middle():
             with Center():
                 with VerticalScroll(id="title-box"):

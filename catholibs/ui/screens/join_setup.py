@@ -4,6 +4,8 @@ from textual.containers import Center, Middle, Vertical
 from textual.screen import Screen
 from textual.widgets import Button, Footer, Input, Static
 
+from ..widgets.music_bar import MusicBar
+
 DEFAULT_PORT = 5555
 
 
@@ -15,6 +17,7 @@ class JoinSetupScreen(Screen):
     ]
 
     def compose(self) -> ComposeResult:
+        yield MusicBar()
         with Middle():
             with Center():
                 with Vertical(id="title-box"):
