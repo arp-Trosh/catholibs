@@ -49,6 +49,13 @@ MusicBar Button.music-btn:focus {
     padding: 0 1;
 }
 
+#music-track {
+    width: 18;
+    height: 1;
+    content-align: left middle;
+    padding: 0 1;
+}
+
 #title-box {
     width: 64;
     border: round #c9a227;

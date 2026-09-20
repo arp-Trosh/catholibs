@@ -46,7 +46,7 @@ class SinglePlayerScreen(Screen):
         await scroll.mount(Static("[bold]Choose today's prayer:[/bold]"))
         list_view = ListView(id="prayer-list")
         await scroll.mount(list_view)
-        for prayer in PRAYERS:
+        for prayer in sorted(PRAYERS, key=lambda p: p.title.casefold()):
             await list_view.append(ListItem(Static(prayer.title), name=prayer.id))
         list_view.focus()
 

@@ -10,7 +10,6 @@ sound.
 from __future__ import annotations
 
 import atexit
-import random
 import threading
 from pathlib import Path
 
@@ -25,13 +24,16 @@ except ImportError:
 
 
 class MusicPlayer:
-    """Owns a background thread that loops the bundled music playlist."""
+    """Owns a background thread that plays the bundled tracks in order,
+    looping back to the first track after the last one finishes."""
 
     def __init__(self) -> None:
         self.volume: int = DEFAULT_VOLUME
         self.muted: bool = False
         self.available: bool = False
         self._tracks: list[str] = []
+        self._index: int = 0
+        self._advance_requested: bool = False
         self._thread: threading.Thread | None = None
         self._stop_event = threading.Event()
 
@@ -52,22 +54,46 @@ class MusicPlayer:
         self._thread.start()
         atexit.register(self._shutdown)
 
+    @property
+    def current_track_name(self) -> str:
+        if not self.available or not self._tracks:
+            return ""
+        return Path(self._tracks[self._index]).stem
+
+    def next_track(self) -> None:
+        self._skip(1)
+
+    def previous_track(self) -> None:
+        self._skip(-1)
+
+    def _skip(self, step: int) -> None:
+        if not self.available:
+            return
+        self._index = (self._index + step) % len(self._tracks)
+        self._advance_requested = True
+        pygame.mixer.music.stop()
+
     def _run(self) -> None:
-        playlist = list(self._tracks)
-        random.shuffle(playlist)
-        index = 0
         while not self._stop_event.is_set():
-            if index >= len(playlist):
-                random.shuffle(playlist)
-                index = 0
+            track = self._tracks[self._index]
             try:
-                pygame.mixer.music.load(playlist[index])
+                pygame.mixer.music.load(track)
                 pygame.mixer.music.play()
             except pygame.error:
                 return
-            index += 1
-            while pygame.mixer.music.get_busy() and not self._stop_event.is_set():
+            self._advance_requested = False
+            while (
+                not self._stop_event.is_set()
+                and not self._advance_requested
+                and pygame.mixer.music.get_busy()
+            ):
                 self._stop_event.wait(_POLL_SECONDS)
+            if self._stop_event.is_set():
+                return
+            if not self._advance_requested:
+                # track finished on its own -- move to the next one, wrapping
+                # back to the first after the last
+                self._index = (self._index + 1) % len(self._tracks)
 
     def set_volume(self, volume: int) -> None:
         self.volume = max(0, min(100, volume))

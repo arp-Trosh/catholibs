@@ -250,7 +250,9 @@ class MultiplayerGameScreen(Screen):
                 await controls.mount(Button("Restart  [r]", id="restart-btn", variant="primary"))
 
     def _build_prayer_select(self) -> Select:
-        options = [("Random", RANDOM_PRAYER)] + [(p.title, p.id) for p in PRAYERS]
+        options = [("Random", RANDOM_PRAYER)] + [
+            (p.title, p.id) for p in sorted(PRAYERS, key=lambda p: p.title.casefold())
+        ]
         return Select(
             options,
             value=self.selected_prayer_id or RANDOM_PRAYER,
