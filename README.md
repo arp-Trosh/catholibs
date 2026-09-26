@@ -50,7 +50,7 @@ python -m catholibs
 
 ## Multiplayer
 
-1. The host chooses **Multiplayer → Host**, enters a name, and optionally a port
+1. The host chooses **Multiplayer → Host a Game** (`h`), enters a name, and optionally a port
    (default `5555`). The host screen shows their local network address.
 2. Other players choose **Multiplayer → Join a Game** (`j`) and enter the host's address and port.
 3. When everyone has joined, the host starts the game.
